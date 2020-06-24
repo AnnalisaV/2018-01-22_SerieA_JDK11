@@ -163,12 +163,12 @@ public class Model {
 				if (!cammino.contains(v)) {
 					
 					// l'ultimo inserito deve essere un anno prima di quello che sto per inserire affinche' siano  stagioni consecutivi
-					if ((cammino.size()-1)== v-1) {
-						
+					//if ((cammino.size()-1)== v-1) {
+					
 					cammino.add(v); 
 					ricorsione(cammino); 
 					cammino.remove(cammino.size()-1); 
-				}
+			//	}
 				}
 			}
 		

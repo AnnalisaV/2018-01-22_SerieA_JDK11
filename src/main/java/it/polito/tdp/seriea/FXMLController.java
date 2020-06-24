@@ -70,6 +70,12 @@ public class FXMLController {
     @FXML
     void doTrovaCamminoVirtuoso(ActionEvent event) {
 
+    	txtResult.clear();
+    	
+    	//controlli fatti prima di attivare qui quindi ok
+    	for (Integer i : model.camminoVirtuoso()) {
+    		txtResult.appendText(i+"\n");
+    	}
     }
 
     @FXML
