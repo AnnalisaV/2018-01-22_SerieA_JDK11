@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.polito.tdp.seriea.model.Season;
+
 import it.polito.tdp.seriea.model.Team;
 
 public class SerieADAO {
@@ -55,6 +58,109 @@ public class SerieADAO {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	/**
+	 * Punti della stagione per la Team passata che gioca in casa
+	 * @param home
+	 * @return
+	 */
+	public Map<Integer, Integer> getPointsHomeTeam(Team home){
+		String sql="SELECT season, 3*COUNT(FTR) AS punti " + 
+				"FROM matches " + 
+				"WHERE hometeam=? AND FTR='H' " + 
+				"GROUP BY season " + 
+				"ORDER by season asc";
+		Map<Integer,Integer> map= new HashMap<>();
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, home.getTeam());
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				map.put(res.getInt("season"), res.getInt("punti"));
+			}
+
+			conn.close();
+			return map;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+	}
+	
+	/**
+	 * Punti della stagione per la Team passata che gioca in trasferta
+	 * @param home
+	 * @return
+	 */
+	public Map<Integer,Integer> getPointsAwayTeam(Team away){
+		String sql="SELECT season, 3*COUNT(FTR) AS punti " + 
+				"FROM matches " + 
+				"WHERE awayteam=? AND FTR='A' " + 
+				"GROUP BY season " + 
+				"ORDER by season asc";
+		Map<Integer,Integer> map= new HashMap<>(); 
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, away.getTeam());
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				map.put(res.getInt("season"), res.getInt("punti"));
+			}
+
+			conn.close();
+			return map;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+	}
+
+
+	/**
+	 * Punti pareggio  della stagione per la Team passata che gioca in trasferta o a casa
+	 * @param home
+	 * @return
+	 */
+	public Map<Integer, Integer> getPointsPareggio(Team team){
+		String sql="SELECT season, COUNT(FTR) AS punti " + 
+				"FROM matches " + 
+				"WHERE awayteam=? OR hometeam=? AND FTR='D' " + 
+				"GROUP BY season " + 
+				"ORDER by season asc";
+		Map<Integer, Integer> map= new HashMap<>(); 
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, team.getTeam());
+			st.setString(2, team.getTeam());
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				map.put(res.getInt("season"), res.getInt("punti"));
+			}
+
+			conn.close();
+			return map;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+		
 	}
 
 }

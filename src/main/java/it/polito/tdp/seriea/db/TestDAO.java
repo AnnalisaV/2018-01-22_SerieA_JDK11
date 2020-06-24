@@ -1,6 +1,7 @@
 package it.polito.tdp.seriea.db;
 
 import java.util.List;
+import java.util.Map;
 
 import it.polito.tdp.seriea.model.Season;
 import it.polito.tdp.seriea.model.Team;
@@ -17,6 +18,11 @@ public class TestDAO {
 		List<Team> teams = dao.listTeams();
 		System.out.println(teams);
 		System.out.println("Teams # rows: " + teams.size());
+		
+		
+		Map<Integer, Integer> mappa= dao.getPointsHomeTeam(new Team("Napoli")); 
+		//for (Integer season : mappa.ke)
+		
 	}
 
 }
