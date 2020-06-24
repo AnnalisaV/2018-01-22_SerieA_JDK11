@@ -17,6 +17,8 @@ public class Model {
 	private SerieADAO dao; 
 	private Graph<Integer, DefaultWeightedEdge> graph; 
 	
+	private List<Integer> best; 
+	
 	public Model() {
 		this.dao= new SerieADAO(); 
 	}
@@ -135,5 +137,49 @@ public class Model {
 		}
 		
 		return "Stagione migliore "+goldSeason+" con differenza di punti "+goldPoints; 
+	}
+	
+	public List<Integer> camminoVirtuoso(){
+		this.best= new ArrayList<>(); 
+		
+		List<Integer> cammino= new ArrayList<>(); 
+		
+		ricorsione(cammino); 
+		return best; 
+		
+		
+	}
+
+	private void ricorsione(List<Integer> cammino) {
+		//condizione di terminazione implicita quando ho temerminato i vertici o i vicini
+		
+		//generale
+		for (Integer vertex : graph.vertexSet()) {
+			
+			List<Integer> vicini= Graphs.successorListOf(graph, vertex); // prendo i successori perche' devo solo migliorare il punteggio
+		    
+			for (Integer v : vicini) {
+				// e' adatto?
+				if (!cammino.contains(v)) {
+					
+					// l'ultimo inserito deve essere un anno prima di quello che sto per inserire affinche' siano  stagioni consecutivi
+					if ((cammino.size()-1)== v-1) {
+						
+					cammino.add(v); 
+					ricorsione(cammino); 
+					cammino.remove(cammino.size()-1); 
+				}
+				}
+			}
+		
+		}
+		
+
+		// ma e' la migliore?
+		if (cammino.size() > best.size()) {
+			best= new ArrayList<>(cammino); 
+		}
+		
+		
 	}
 }

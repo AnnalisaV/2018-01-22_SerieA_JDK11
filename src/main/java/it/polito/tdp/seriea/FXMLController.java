@@ -64,7 +64,7 @@ public class FXMLController {
     	txtResult.appendText(model.annataDOro(boxSquadra.getValue()));
     	//model.creaGrafo(boxSquadra.getValue()); 
     	
-    	
+    	this.btnTrovaCamminoVirtuoso.setDisable(false);
     }
 
     @FXML
@@ -86,5 +86,6 @@ public class FXMLController {
 		this.model = model;
 		this.boxSquadra.getItems().addAll(model.getTeams()); 
 		this.btnTrovaAnnataOro.setDisable(true);
+		this.btnTrovaCamminoVirtuoso.setDisable(true);
 	}
 }
